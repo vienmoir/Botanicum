@@ -25,7 +25,3 @@ cv2.imshow('closing', closing)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
-## One more check
-## Another
-## I added new line only to check if git-merge is working
