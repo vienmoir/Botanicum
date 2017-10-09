@@ -25,3 +25,5 @@ closing = cv2.morphologyEx(img2, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+## I added new line only to check if git-merge is working
