@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 10 14:52:33 2017
 
-@author: Acer
-"""
 import cv2
 import numpy as np
 from skimage.measure import regionprops
