@@ -17,7 +17,6 @@ for i in range(0, nb_components):
     if sizes[i] >= min_size:
         img2[output == i + 1] = 255
 #cv2.imshow('wll',img2)
-#kernel = np.ones((5,5),np.uint8)
 
 ###### closing small holes inside the foreground objects or small black points on the object ##########
 closing = cv2.morphologyEx(img2, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT,(15,15)))
