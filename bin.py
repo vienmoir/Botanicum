@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-img = cv2.imread('img/4.jpg')
+img = cv2.imread('img/3.jpg')
 grayscaled = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ######## otsu binarization ########
 retval3, otsu = cv2.threshold(grayscaled, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
