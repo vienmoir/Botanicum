@@ -6,7 +6,7 @@ from skimage.measure import regionprops
 
 result=0
 
-img = cv2.imread('img/6.jpg')
+img = cv2.imread('img/5.jpg')
 
 #Масштабирование (его присутствие меняет бинаризацию, если масштабирование не производить, то min_size = 30000)
 TARGET_PIXEL_AREA = 300000.0
@@ -63,7 +63,7 @@ if len(contours) == 0:
     
 else:
     #Tophat
-    kernel = np.ones((25,37),np.uint8)
+    kernel = np.ones((15,25),np.uint8)
     tophat = cv2.morphologyEx(closing, cv2.MORPH_TOPHAT, kernel)
     thresh = cv2.threshold(tophat, 200, 255, cv2.THRESH_BINARY)[1]
     thresh2 = thresh.copy()
@@ -131,7 +131,7 @@ else:
         #Выделение точки роста на изображении
         backtorgb[coord[0],coord[1]] = [0,0,255]
         height, width, channels = backtorgb.shape
-        print (coord)
+        #print (coord)
         cv2.line(backtorgb,(0,coord[0]),(height,coord[0]),(0,0,255),1)
         cv2.line(backtorgb,(coord[1],width),(coord[1],0),(0,0,255),1)
         
@@ -140,7 +140,7 @@ else:
         #res3 = cv2.resize(backtorgb, dim, interpolation = cv2.INTER_AREA)
         
         #cv2.imshow('imgs', np.hstack([res1,res2]))
-        cv2.imshow('rgb', backtorgb)
+        #cv2.imshow('rgb', backtorgb)
         
         edged = img3.copy()
         _, contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -182,7 +182,7 @@ if result == 0:
     cv2.drawContours(edged,contours,-1,(255,255,255),1)
     
     #cv2.imshow('Leaf contour', edged)
-    #cv2.imshow('Image', img3)
+    cv2.imshow('Image', img3)
     print 'Done!'
 
     #####Eccentricity#####
