@@ -1,51 +1,61 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 23 23:30:39 2017
+
+@author: Daria
+"""
 import numpy as np
 import cv2
 import math
 from skimage.measure import regionprops
+ 
+result = 0
 
-result=0
+# Read image
+img = cv2.imread("img/lipa.jpg", cv2.IMREAD_GRAYSCALE);
 
-img = cv2.imread('img/5.jpg')
-
-#Масштабирование (его присутствие меняет бинаризацию, если масштабирование не производить, то min_size = 30000)
+# Resize if necessary
 TARGET_PIXEL_AREA = 300000.0
 ratio = float(img.shape[1]) / float(img.shape[0])
 new_h = int(math.sqrt(TARGET_PIXEL_AREA / ratio) + 0.5)
 new_w = int((new_h * ratio) + 0.5)
 img = cv2.resize(img, (new_w,new_h))
 
-height, width,_ = img.shape
+height, width = img.shape
 
-#Бинаризация
-#Серый мир (несильно меняет сутцацию)
-img = img.transpose(2, 0, 1).astype(np.uint32)
-mu_g = np.average(img[1])
-img[0] = np.minimum(img[0]*(mu_g/np.average(img[0])),255)
-img[2] = np.minimum(img[2]*(mu_g/np.average(img[2])),255)
-img = img.transpose(1, 2, 0).astype(np.uint8)
+# Threshold 
+th, im_th = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
 
-#cv2.imshow('After grey world', img)
-grayscaled = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-retval3, otsu = cv2.threshold(grayscaled, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+# Copy the thresholded image.
+im_floodfill = im_th.copy()
+ 
+# Mask used to flood filling.
+# Notice the size needs to be 2 pixels > than the image.
+h, w = im_th.shape[:2]
+mask = np.zeros((h+2, w+2), np.uint8)
+ 
+# Floodfill from point (0, 0)
+cv2.floodFill(im_floodfill, mask, (0,0), 255);
+ 
+# Invert floodfilled image
+im_floodfill_inv = cv2.bitwise_not(im_floodfill)
+ 
+# Combine the two images to get the foreground.
+im_out = im_th | im_floodfill_inv
 
-#Удаление мелких объектов
-nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(otsu, connectivity=8)
+# Connected components
+nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
 sizes = stats[1:, -1]; nb_components = nb_components - 1
 min_size = height*width*0.08
 #min_size = 30000 
 
+# Remove small objects
 img2 = np.zeros((output.shape))
 for i in range(0, nb_components):
     if sizes[i] >= min_size:
         img2[output == i + 1] = 255
-        
-#Заполнение мелких дыр в объекте
-closing = cv2.morphologyEx(img2, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_RECT,(15,15)))
-#cv2.imshow('After preprocessing', closing)
-
 #Перевод изображения в рабочую кодировку
-closing = closing.astype(np.uint8)
+closing = img2.astype(np.uint8)
 
 #Выделение контуров
 edged = closing.copy()
@@ -63,6 +73,7 @@ if len(contours) == 0:
     
 else:
     #Tophat
+    #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50,50))
     kernel = np.ones((15,25),np.uint8)
     tophat = cv2.morphologyEx(closing, cv2.MORPH_TOPHAT, kernel)
     thresh = cv2.threshold(tophat, 200, 255, cv2.THRESH_BINARY)[1]
@@ -135,12 +146,19 @@ else:
         cv2.line(backtorgb,(0,coord[0]),(height,coord[0]),(0,0,255),1)
         cv2.line(backtorgb,(coord[1],width),(coord[1],0),(0,0,255),1)
         
-        #res1 = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-        #res2 = cv2.resize(img3, dim, interpolation = cv2.INTER_AREA)
-        #res3 = cv2.resize(backtorgb, dim, interpolation = cv2.INTER_AREA)
+        # Connected components
+        nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(img3, connectivity=8)
+        sizes = stats[1:, -1]; nb_components = nb_components - 1
+        min_size = height*width*0.08
+        #min_size = 30000 
         
-        #cv2.imshow('imgs', np.hstack([res1,res2]))
-        #cv2.imshow('rgb', backtorgb)
+        # Remove small objects
+        img = np.zeros((output.shape))
+        for i in range(0, nb_components):
+            if sizes[i] >= min_size:
+                img[output == i + 1] = 255
+                #Перевод изображения в рабочую кодировку
+                img3 = img.astype(np.uint8)
         
         edged = img3.copy()
         _, contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -155,7 +173,7 @@ else:
         edged = cv2.erode(edged, np.ones((3,3)))
         edged = cv2.bitwise_not(edged)
         edged = cv2.bitwise_and(edged,edged3)
-        
+                
         #Проверка оставшихся на изображении контуров
         _, contours, _ = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) > 1:
@@ -188,43 +206,44 @@ if result == 0:
     #####Eccentricity#####
     props = regionprops(img3)
     eccentricity = props[0].eccentricity
-    #print(props[0].eccentricity)
 
     #####Solidity#####
     solidity = props[0].solidity
-    #print(props[0].solidity)
     
     #####Extent#####
     extent = props[0].extent
-    #print(props[0].extent)
     
     #####Equivalent Diameter#####
     equivalent_diameter = props[0].equivalent_diameter
-    #print(props[0].equivalent_diameter)
-    
+
     #####Convex hull#####
     convexhull = props[0].convex_area
-    #print(props[0].convex_area)
 
     #Центроид
     props = regionprops(img3)
     x1 = props[0].centroid[1]
     y1 = props[0].centroid[0]
-    #print(x1,y1)
-    
+
     #Координаты точек контура
     _, contours, _ = cv2.findContours(img3, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     cnt = contours[0]
-    #print(len(cnt))
+    
+    class myarray(np.ndarray):
+        def __new__(cls, *args, **kwargs):
+            return np.array(*args, **kwargs).view(myarray)
+        def index(self, value):
+            return np.where(self==value)
     
     #Вектор расстояний dist от центра масс до границ
+    N = len(cnt)
     dist = [] 
-    for i in range(len(cnt)): 
+    for i in range(N): 
     	p = cnt[i]
     	x2 = p.item(0)
     	y2 = p.item(1)
     	distance = ((x2 - x1)**2 + (y2 - y1)**2)**(.5)
-    	dist.append(distance)    
-    
+    	dist.append(distance)
+        
+# Display images.
 cv2.waitKey(0)
-cv2.destroyAllWindows()  
+cv2.destroyAllWindows()
