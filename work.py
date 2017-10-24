@@ -8,6 +8,7 @@ import numpy as np
 import cv2
 import math
 from skimage.measure import regionprops
+import matplotlib.pyplot as plt
  
 result = 0
 
@@ -73,8 +74,8 @@ if len(contours) == 0:
     
 else:
     #Tophat
-    #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50,50))
-    kernel = np.ones((15,25),np.uint8)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50,50))
+    #kernel = np.ones((15,25),np.uint8)
     tophat = cv2.morphologyEx(closing, cv2.MORPH_TOPHAT, kernel)
     thresh = cv2.threshold(tophat, 200, 255, cv2.THRESH_BINARY)[1]
     thresh2 = thresh.copy()
@@ -139,10 +140,9 @@ else:
                  coord = i[0],i[1]-1
                  continue
         
-        #Выделение точки роста на изображении
+        # Выделение точки роста на изображении
         backtorgb[coord[0],coord[1]] = [0,0,255]
         height, width, channels = backtorgb.shape
-        #print (coord)
         cv2.line(backtorgb,(0,coord[0]),(height,coord[0]),(0,0,255),1)
         cv2.line(backtorgb,(coord[1],width),(coord[1],0),(0,0,255),1)
         
@@ -150,30 +150,27 @@ else:
         nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(img3, connectivity=8)
         sizes = stats[1:, -1]; nb_components = nb_components - 1
         min_size = height*width*0.08
-        #min_size = 30000 
         
         # Remove small objects
         img = np.zeros((output.shape))
         for i in range(0, nb_components):
             if sizes[i] >= min_size:
                 img[output == i + 1] = 255
-                #Перевод изображения в рабочую кодировку
+                # Перевод изображения в рабочую кодировку
                 img3 = img.astype(np.uint8)
         
         edged = img3.copy()
         _, contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(edged,contours,-1,(255,255,255),1)
-        #kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9))
-        #dilated = cv2.dilate(edged, kernel) 
-        
-        #Удаление незамкнутых контуров
-        edged3 = edged.copy()
-        mask = np.zeros((np.array(edged.shape)+2), np.uint8)
-        cv2.floodFill(edged, mask, (0,0), (255))
-        edged = cv2.erode(edged, np.ones((3,3)))
-        edged = cv2.bitwise_not(edged)
-        edged = cv2.bitwise_and(edged,edged3)
-                
+       
+#        #Удаление незамкнутых контуров
+#        edged3 = edged.copy()
+#        mask = np.zeros((np.array(edged.shape)+2), np.uint8)
+#        cv2.floodFill(edged, mask, (0,0), (255))
+#        edged = cv2.erode(edged, np.ones((3,3)))
+#        edged = cv2.bitwise_not(edged)
+#        edged = cv2.bitwise_and(edged,edged3)
+#                
         #Проверка оставшихся на изображении контуров
         _, contours, _ = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(contours) > 1:
@@ -203,28 +200,28 @@ if result == 0:
     cv2.imshow('Image', img3)
     print 'Done!'
 
-    #####Eccentricity#####
+    ##### Eccentricity #####
     props = regionprops(img3)
     eccentricity = props[0].eccentricity
 
-    #####Solidity#####
+    ##### Solidity #####
     solidity = props[0].solidity
     
-    #####Extent#####
+    ##### Extent #####
     extent = props[0].extent
     
-    #####Equivalent Diameter#####
+    ##### Equivalent Diameter #####
     equivalent_diameter = props[0].equivalent_diameter
 
-    #####Convex hull#####
+    ##### Convex hull #####
     convexhull = props[0].convex_area
 
-    #Центроид
+    # Центроид
     props = regionprops(img3)
     x1 = props[0].centroid[1]
     y1 = props[0].centroid[0]
 
-    #Координаты точек контура
+    # Координаты точек контура
     _, contours, _ = cv2.findContours(img3, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     cnt = contours[0]
     
@@ -234,7 +231,7 @@ if result == 0:
         def index(self, value):
             return np.where(self==value)
     
-    #Вектор расстояний dist от центра масс до границ
+    # Вектор расстояний dist от центра масс до границ
     N = len(cnt)
     dist = [] 
     for i in range(N): 
@@ -244,6 +241,22 @@ if result == 0:
     	distance = ((x2 - x1)**2 + (y2 - y1)**2)**(.5)
     	dist.append(distance)
         
+    # Поиск основания
+    start = 0
+    # Ищем соответствие координатам основания
+    point = np.where(np.flip(cnt,2) == coord)
+    # В результатах ищем полное совпадение
+    for i in range(len(np.unique(point[0]))):
+        if (np.flip(cnt[np.unique(point[0])[i]],1) == coord)[0][0] == True & (np.flip(cnt[np.unique(point[0])[i]],1) == coord)[0][1] == True:
+          #  print np.unique(point[0])[i]
+           # print i
+          start = np.unique(point[0])[i]
+    
+    # Перемешиваем по индексу    
+    newdist = dist[start:N] + dist[0:start]
+    plt.plot(newdist)
+   # plt.plot(dist)
+    
 # Display images.
 cv2.waitKey(0)
 cv2.destroyAllWindows()
