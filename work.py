@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 23 23:30:39 2017
+@author: Daria
+"""
 import numpy as np
 import cv2
 import math
@@ -8,7 +12,7 @@ import matplotlib.pyplot as plt
 result = 0
 
 # Read image
-sourceImage = cv2.imread("img/2.jpg", cv2.IMREAD_GRAYSCALE);
+sourceImage = cv2.imread("img/4.jpg", cv2.IMREAD_GRAYSCALE);
 
 # Resize if necessary
 TARGET_PIXEL_AREA = 300000.0
@@ -66,7 +70,7 @@ if len(contours) == 0:
     
 else:
     #Tophat
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50,50))
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50, 50))
     #kernel = np.ones((15,25),np.uint8)
     tophat = cv2.morphologyEx(img, cv2.MORPH_TOPHAT, kernel)
     thresh = cv2.threshold(tophat, 200, 255, cv2.THRESH_BINARY)[1]
@@ -78,6 +82,7 @@ else:
     if len(contours) == 0:
         result=2
         print 'Ошибка',result,'. Сфотографируйте целый лист с черешком, пожалуйста.'
+        #cv2.imshow('Image', img)
         
     else:        
         #Вычисление диагонали прямоугольного контура объекта
@@ -143,6 +148,7 @@ else:
         if len(contours) > 1:
                 result=4
                 print 'Ошибка',result,'. Сфотографируйте один лист на нейтральном фоне, пожалуйста.'
+                cv2.imshow('Image', img)
         else:
             if len(contours) == 1:
                 cnt = contours[0]
@@ -153,13 +159,16 @@ else:
                     include = False
                     result=3
                     print 'Ошибка',result,'. Лист выходит за края изображения, сфотографируйте его полностью, пожалуйста.'
+                    cv2.imshow('Image', img)
                 if x+w+1 >= img.shape[1] or y+h+1 >= img.shape[0]:
                     include = False
                     result=3
                     print 'Ошибка',result,'. Лист выходит за края изображения, сфотографируйте его полностью, пожалуйста.'
+                    cv2.imshow('Image', img)
                 if area < min_size:
                     result=5
                     print 'Ошибка ',result,'. Сфотографируйте лист на контрастном фоне, пожалуйста.'
+                    cv2.imshow('Image', img)
             
 if result == 0:
     cv2.drawContours(edgedImage,contours,-1,(255,255,255),1)
@@ -171,6 +180,9 @@ if result == 0:
     ##### Eccentricity #####
     props = regionprops(edgedImage)
     eccentricity = props[0].eccentricity
+    
+    #### Circularity ####
+    #circularity = (4*math.pi*A) / (P**2)
 
     ##### Solidity #####
     solidity = props[0].solidity
@@ -193,12 +205,6 @@ if result == 0:
     _, contours, _ = cv2.findContours(edgedImage, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
     cnt = contours[0]
     
-    class myarray(np.ndarray):
-        def __new__(cls, *args, **kwargs):
-            return np.array(*args, **kwargs).view(myarray)
-        def index(self, value):
-            return np.where(self==value)
-    
     # Вектор расстояний dist от центра масс до границ
     N = len(cnt)
     dist = [] 
@@ -216,8 +222,6 @@ if result == 0:
     # В результатах ищем полное совпадение
     for i in range(len(np.unique(point[0]))):
         if (np.flip(cnt[np.unique(point[0])[i]],1) == coord)[0][0] == True & (np.flip(cnt[np.unique(point[0])[i]],1) == coord)[0][1] == True:
-          #  print np.unique(point[0])[i]
-           # print i
           start = np.unique(point[0])[i]
     
     # Перемешиваем по индексу    
