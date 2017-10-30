@@ -267,6 +267,7 @@ if result == 0:
     f10 = len(newdist)/max(newdist)
     #plt.plot(dist)
     
+    
     #Display images.
     cv2.imshow('Image', img)
     #cv2.imshow('Leaf contour', edgedImage)
