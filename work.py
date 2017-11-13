@@ -183,7 +183,9 @@ if result == 0:
     eccentricity = props[0].eccentricity
     
     #### Circularity ####
-    #circularity = (4*math.pi*A) / (P**2)
+    perimeter = cv2.arcLength(cnt,True) 
+    area = cv2.contourArea(cnt) 
+    circularity = (4*math.pi*area)/(perimeter**2)
 
     ##### Solidity #####
     solidity = props[0].solidity
