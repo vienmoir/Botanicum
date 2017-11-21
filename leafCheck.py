@@ -13,8 +13,8 @@ def leafCheck(imageName):
 
     # Read image
     img = imageName
-    print imageName
-    sourceImage = cv2.imread(imageName, cv2.IMREAD_GRAYSCALE);
+    #print imageName
+    sourceImage = cv2.imread(imageName, cv2.IMREAD_GRAYSCALE)
 
     # Resize if necessary
     TARGET_PIXEL_AREA = 300000.0
@@ -22,54 +22,52 @@ def leafCheck(imageName):
     new_h = int(math.sqrt(TARGET_PIXEL_AREA / ratio) + 0.5)
     new_w = int((new_h * ratio) + 0.5)
     img = cv2.resize(sourceImage, (new_w,new_h))
-    height, width = sourceImage.shape
-    print new_h, new_w
-
+    height, width = img.shape
+    
     # Threshold 
     th, im_th = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
-
+    
     # Copy the thresholded image.
     im_floodfill = im_th.copy()
-
+     
     # Mask used to flood filling.
     # Notice the size needs to be 2 pixels > than the image.
     h, w = im_th.shape[:2]
     mask = np.zeros((h+2, w+2), np.uint8)
-
+     
     # Floodfill from point (0, 0)
     cv2.floodFill(im_floodfill, mask, (0,0), 255);
-
+     
     # Invert floodfilled image
     im_floodfill_inv = cv2.bitwise_not(im_floodfill)
-
+     
     # Combine the two images to get the foreground.
     im_out = im_th | im_floodfill_inv
-
+    
     # Connected components
-    nb_components, output, statistics, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
-    sizes = statistics[1:, -1]; nb_components = nb_components - 1
+    nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
+    sizes = stats[1:, -1]; nb_components = nb_components - 1
     min_size = height*width*0.08
-
+    
     # Remove small objects
     img = np.zeros((output.shape))
     for i in range(0, nb_components):
         if sizes[i] >= min_size:
             img[output == i + 1] = 255
-
+    
     img = img.astype(np.uint8)
-    #cv2.imshow('After contouring', img)
-
-    #
+    
+    #Contours
     edgedImage = img.copy()
     _, contours, _ = cv2.findContours(edgedImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(edgedImage,contours,-1,(255,255,255),1)
-    #cv2.imshow('After contouring', edgedImage) 
+    #cv2.imshow('After contouring', preprocessedImage)
     #
     testlen = len(contours)
     print testlen
     if len(contours) == 0:
         result=False
-        error =  'The leaf is too small. Take a closer shot!'
+        error = 'The leaf is too small. Take a closer shot!'
         return error
 
     else:
