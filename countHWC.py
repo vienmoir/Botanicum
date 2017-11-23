@@ -5,7 +5,7 @@ Created on Thu Nov 23 14:30:31 2017
 @author: Eclair
 """
 import numpy as np
-from peakDetect import peakDetect
+from peakDetect import peakdetect
 from operator import itemgetter
 
 
@@ -15,7 +15,7 @@ def countLen(x1, y1, x2, y2):
 
 ### Function for Peaks detection and heights&lengths evaluation ###
 def CountHeightWidthCoord(arr):
-    maX, miN = peakDetect(arr, lookahead=10)
+    maX, miN = peakdetect(arr, lookahead=10)
 
     fullArr = []
     for i in range(len(maX)):
