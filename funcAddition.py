@@ -13,7 +13,7 @@ from scipy import stats as stts
 from leafCheck import leafCheck
 from countHWC import CountHeightWidthCoord
 
-sourceImage = cv2.imread("img/5.jpg", cv2.IMREAD_GRAYSCALE);
+sourceImage = cv2.imread("img/1.jpg", cv2.IMREAD_GRAYSCALE);
 try:
     checkedImage,cnt,coord = leafCheck(sourceImage)
 except ValueError:
