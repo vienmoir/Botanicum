@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 result = 0
 
 # Read image
-sourceImage = cv2.imread("img/10.jpg", cv2.IMREAD_GRAYSCALE);
+sourceImage = cv2.imread("img/9.jpg", cv2.IMREAD_GRAYSCALE);
 
 # Resize if necessary
 TARGET_PIXEL_AREA = 300000.0
@@ -45,6 +45,7 @@ im_out = im_th | im_floodfill_inv
 nb_components, output, statistics, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
 sizes = statistics[1:, -1]; nb_components = nb_components - 1
 min_size = height*width*0.08
+max_size = height*width*0.8
 
 # Remove small objects
 img = np.zeros((output.shape))

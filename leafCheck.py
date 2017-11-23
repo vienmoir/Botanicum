@@ -11,11 +11,6 @@ import math
 def leafCheck(sourceImage):
     result = True
 
-    # Read image
-#    img = imageName
-    #print imageName
-#    sourceImage = cv2.imread(imageName, cv2.IMREAD_GRAYSCALE)
-
     # Resize if necessary
     TARGET_PIXEL_AREA = 300000.0
     ratio = float(sourceImage.shape[1]) / float(sourceImage.shape[0])
@@ -46,8 +41,10 @@ def leafCheck(sourceImage):
     
     # Connected components
     nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
-    sizes = stats[1:, -1]; nb_components = nb_components - 1
+    sizes = stats[1:, -1] 
+    nb_components = nb_components - 1
     min_size = height*width*0.08
+    max_size = height*width*0.8
     
     # Remove small objects
     img = np.zeros((output.shape))
@@ -57,19 +54,16 @@ def leafCheck(sourceImage):
     
     img = img.astype(np.uint8)
     
-    #Contours
+    # Contours
     edgedImage = img.copy()
     _, contours, _ = cv2.findContours(edgedImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(edgedImage,contours,-1,(255,255,255),1)
-    #cv2.imshow('After contouring', preprocessedImage)
-    #
-#    testlen = len(contours)
-#    print testlen
+
     if len(contours) == 0:
         result=False
         error = 'The leaf is too small. Take a closer shot!'
-        return error
-
+        return error,0,0
+        
     else:
         #Tophat
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(50, 50))
@@ -84,7 +78,7 @@ def leafCheck(sourceImage):
         if len(contours) == 0:
             result=False
             error = 'Error. Use a neutral background, please!'
-            return error
+            return error,0,0
 
         else:
             #
@@ -120,7 +114,6 @@ def leafCheck(sourceImage):
 
             #
             backtorgb = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
-
 
             #
             for i in forPoint:
@@ -158,21 +151,22 @@ def leafCheck(sourceImage):
                     x,y,w,h = cv2.boundingRect(cnt)
                     area = cv2.contourArea(cnt)
                     if x <= 1 or y <=1:
-                        #cv2.imshow('Image', img)
                         result=False
                         error = 'Error. Leaf extends beyond the image borders.'
-                        return error
+                        return error,0,0
                     elif x+w-5 >= img.shape[1] or y+h-5 >= img.shape[0]:
-                        #cv2.imshow('Image', img)
                         result=False
                         error = 'Error. Leaf extends beyond the image borders.'
-                        return error
+                        return error,0,0
                     elif area < min_size:
-                        #cv2.imshow('Image', img)
                         result=False
                         error = 'Error. Not enough contrast.'
-                        return error
+                        return error,0,0
+                    elif area > max_size:
+                        result=False
+                        error = 'Error. Please, take a photo in another illumination.'
+                        return error,0,0
+                        
     if result == True:
         print "Your leaf was checked successfully!"
         return img,cnt,coord
-#        return 'What a leaf!'

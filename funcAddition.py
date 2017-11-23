@@ -3,8 +3,7 @@
 Created on Mon Oct 23 23:30:39 2017
 @author: Daria
 """
-from __future__ import division
-import sys
+#from __future__ import division
 import numpy as np
 import cv2
 import math
@@ -13,15 +12,10 @@ from scipy import stats as stts
 from leafCheck import leafCheck
 from countHWC import CountHeightWidthCoord
 
-sourceImage = cv2.imread("img/1.jpg", cv2.IMREAD_GRAYSCALE);
-try:
-    checkedImage,cnt,coord = leafCheck(sourceImage)
-except ValueError:
-    error = leafCheck(sourceImage)
-    print error
-    sys.exit(1)
+sourceImage = cv2.imread("img/5.jpg", cv2.IMREAD_GRAYSCALE);
+checkedImage,cnt,coord = leafCheck(sourceImage)
 
-if type(checkedImage) == np.ndarray:
+if type(checkedImage) != str:
     ##### Eccentricity #####
     props = regionprops(checkedImage)
     eccentricity = props[0].eccentricity
@@ -154,5 +148,8 @@ if type(checkedImage) == np.ndarray:
                 meanHeightV, maxVal]
     print "The features were successfully extracted!"
 
+else:
+    print checkedImage
+    
 cv2.waitKey(0)
 cv2.destroyAllWindows()
