@@ -1,0 +1,2 @@
+Type,Eccentricity,Solidity,Extent,Equivalent_diameter,Convex_hull,CircleRatio,Mean,Variance,Median,Mode,Vertical_symmetry,Horizontal_symmetry,Minimal_distance,Maximal_distance,Length_ratio,Peaks_number,Valleys_number,Average_peak_width,Average_peak_height,Minimal_peak,Average_valley_width,Average_valley_height,Maximal_valley
+unknown,1.0421,0.67672,0.63078,0.95963,399.46,1.3172,203.19,753,189.68,189.71,1.0113,1.0079,0.85645,1.3749,4.8143,23,23.227,13.38,180.68,24,40.425,9.74,-174.02

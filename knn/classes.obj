@@ -1,0 +1,71 @@
+cnumpy.core.multiarray
+_reconstruct
+p0
+(cnumpy
+ndarray
+p1
+(I0
+tp2
+S'b'
+p3
+tp4
+Rp5
+(I1
+(L18L
+tp6
+cnumpy
+dtype
+p7
+(S'O8'
+p8
+I0
+I1
+tp9
+Rp10
+(I3
+S'|'
+p11
+NNNI-1
+I-1
+I63
+tp12
+bI00
+(lp13
+S'Acer platanoides'
+p14
+aS'Aesculus hippocastanum'
+p15
+aS'Alnus incana'
+p16
+aS'Betula pubescens'
+p17
+aS'Betula_pendula'
+p18
+aS'Corylus avellana'
+p19
+aS'Crataegus_monogyna'
+p20
+aS'Fraxinus excelsior'
+p21
+aS'Ginkgo biloba'
+p22
+aS'Ilex aquifolium'
+p23
+aS'Populus nigra'
+p24
+aS'Populus tremula'
+p25
+aS'Prunus padus'
+p26
+aS'Quercus robur'
+p27
+aS'Salix alba'
+p28
+aS'Syringa vulgaris'
+p29
+aS'Tilia cordata'
+p30
+aS'Ulmus laevis'
+p31
+atp32
+b.
