@@ -15,8 +15,11 @@ import csv
 
 imNum = 0
 
-##DEFINE TREE TYPE##
-treeType = 'all'
+## Чтобы начать работу, просто введите название вида дерева, и убедитесь,
+## что путь до папки в строке 32 прописан верно. Название дерева должно 
+## соответствовать названию папки
+
+treeType = 'alnus_incana'
 
 head = ['Type','Eccentricity','Circularity','Solidity','Extent','Equivalent_diameter',
         'Convex_hull','CircleRatio','Mean','Variance','Median','Mode','Vertical_symmetry','Horizontal_symmetry',
@@ -26,7 +29,7 @@ head = ['Type','Eccentricity','Circularity','Solidity','Extent','Equivalent_diam
 
 propNum = len(head)
 images = []
-for i in glob2.glob('D:/Uni/mas/bot/img/*.*'):
+for i in glob2.glob('D:/Uni/bac/lvs/project/' + treeType + '/*.*'):
     img = cv2.imread(i, cv2.IMREAD_GRAYSCALE)
     images.append(img)
 
