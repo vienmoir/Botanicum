@@ -4,7 +4,11 @@ from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-import pickle
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import itertools
+
+#import pickle
 
 data = pd.read_csv("all.csv")
 ### getting Xs and Ys #####
@@ -16,10 +20,10 @@ y = y.astype('category')
 X_scaled = (X-X.min())/(X.max()-X.min())
 
 ### SPLITTING INTO TRAIN AND TEST DATA
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.33, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=28)
 
 ####### KNN
-knn = KNeighborsClassifier(n_neighbors=5) 
+knn = KNeighborsClassifier(n_neighbors=3) 
 knn.fit(X_train, y_train) # Fit the model using X as training data and y as target values
 preds = knn.predict(X_test)	# Predict the class labels for the provided data
 
