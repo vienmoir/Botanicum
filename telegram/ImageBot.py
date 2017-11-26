@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackQueryHandler, filters
-from telegram import LabeledPrice, ShippingOption, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from leafCheck import leafCheck
+from processLeaf import process
+from classifyLeaf import classify
 
 import random
 
@@ -30,6 +32,9 @@ def get_image(bot, update):
             'Минутку, посмотрю в справочнике',
             'Всё в порядке, обрабатываю',
         ]))
+        features = process(checkedImage,cnt,coord)
+        result = classify(features)
+        update.message.reply_text(result)
     else:
         update.message.reply_text(checkedImage)
 

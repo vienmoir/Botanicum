@@ -55,13 +55,11 @@ mms = pd.concat([maxs, mins], axis=1).T
 mms.to_pickle('mms.p')
 mms = pd.read_pickle('mms.p',compression='infer')
 
-<<<<<<< HEAD
-
-=======
->>>>>>> b4d89a8d108261606d44bd2a3b39ae15e4512186
 # модель:
+knn_model = KNeighborsClassifier(n_neighbors=3) 
+knn_model.fit(X_scaled, y) # Fit the model using X as training data and y as target values
 filename = '3nnmodel.sav' 
-pickle.dump(knn, open(filename, 'wb'))
+pickle.dump(knn_model, open(filename, 'wb'))
 
 # классы
 filehandler = open('20classes.obj', 'w')
