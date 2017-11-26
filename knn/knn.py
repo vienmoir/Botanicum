@@ -55,7 +55,10 @@ mms = pd.concat([maxs, mins], axis=1).T
 mms.to_pickle('mms.p')
 mms = pd.read_pickle('mms.p',compression='infer')
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> b4d89a8d108261606d44bd2a3b39ae15e4512186
 # модель:
 filename = '3nnmodel.sav' 
 pickle.dump(knn, open(filename, 'wb'))
