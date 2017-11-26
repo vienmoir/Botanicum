@@ -4,11 +4,6 @@ from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
-import itertools
-
-#import pickle
 
 data = pd.read_csv("all.csv")
 ### getting Xs and Ys #####
