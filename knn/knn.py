@@ -4,6 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+import pickle
 
 data = pd.read_csv("all.csv")
 ### getting Xs and Ys #####
@@ -30,16 +31,6 @@ acc = knn.score(X_test, y_test)
 probs = knn.predict_proba(X_test)
 classes = np.unique(y)
 
-# рабочий код 
-ind = np.argpartition(probs[3], -3)[-3:]
-probs[3][ind]
-ind = [item for item in ind if probs[3][item] > 0]
-
-if len(ind) > 3:
-    ind = ind[len(ind)-3:len(ind)]
-results = classes[ind]
-# конец рабочего кода
-
 k = 0
 mistakes = []
 # accuracy 
@@ -63,3 +54,11 @@ mms = pd.concat([maxs, mins], axis=1).T
 # сохранение и загрузка для проверки
 mms.to_pickle('mms.p')
 mms = pd.read_pickle('mms.p',compression='infer')
+
+# модель:
+filename = '3nnmodel.sav' 
+pickle.dump(knn, open(filename, 'wb'))
+
+# классы
+filehandler = open('20classes.obj', 'w')
+pickle.dump(classes, filehandler)
