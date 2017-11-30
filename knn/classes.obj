@@ -11,7 +11,7 @@ p3
 tp4
 Rp5
 (I1
-(L18L
+(L20L
 tp6
 cnumpy
 dtype
@@ -31,41 +31,45 @@ I63
 tp12
 bI00
 (lp13
-S'Acer platanoides'
+S'acer_platanoides'
 p14
-aS'Aesculus hippocastanum'
+aS'aesculus_hippocastanum'
 p15
-aS'Alnus incana'
+aS'alnus_incana'
 p16
-aS'Betula pubescens'
+aS'berberis_vulgaris'
 p17
-aS'Betula_pendula'
+aS'betula_pendula'
 p18
-aS'Corylus avellana'
+aS'betula_pubescens'
 p19
-aS'Crataegus_monogyna'
+aS'corylus_avellana'
 p20
-aS'Fraxinus excelsior'
+aS'crataegus_monogyna'
 p21
-aS'Ginkgo biloba'
+aS'fagus_sylvatica'
 p22
-aS'Ilex aquifolium'
+aS'fraxinus_excelsior'
 p23
-aS'Populus nigra'
+aS'ginkgo_biloba'
 p24
-aS'Populus tremula'
+aS'populus_nigra'
 p25
-aS'Prunus padus'
+aS'populus_tremula'
 p26
-aS'Quercus robur'
+aS'prunus_padus'
 p27
-aS'Salix alba'
+aS'quercus_robur'
 p28
-aS'Syringa vulgaris'
+aS'salix_alba'
 p29
-aS'Tilia cordata'
+aS'sorbus_aucuparia'
 p30
-aS'Ulmus laevis'
+aS'syringa_vulgaris'
 p31
-atp32
+aS'tilia_cordata'
+p32
+aS'ulmus_laevis'
+p33
+atp34
 b.
