@@ -33,14 +33,25 @@ def get_image(bot, update):
             'Всё в порядке, обрабатываю',
         ]))
         features = process(checkedImage,cnt,coord)
-        result = classify(features)
+        result1, result2, result3 = classify(features)
+        if result3 == 0:
+            if result2 == 0:
+                update.message.reply_text("Скорее всего, это " + result1 +
+                                          ". Подробнее об этом виде:")
+            else:
+                update.message.reply_text("Похоже, это " + result1 + " или " + 
+                                      result2 + ". Вот их описания:")
+        else:
+            update.message.reply_text("Кажется, это " + result1 + " или "
+                                          + result2 + ". Но может быть и " +
+                                          result3 + "! Подробнее о них:")
         update.message.reply_text(result)
     else:
         update.message.reply_text(checkedImage)
 
 def reply_text(bot, update):
     update.message.reply_text(random.choice([
-        'Как дела?',
+        'Следите, чтобы пальцы не попали в кадр',
         'Хотите узнать, какое рядом с вами дерево?',
         'Погода отличная, пора в парк!',
         'Пожалуйста, отправьте мне фото листика',
