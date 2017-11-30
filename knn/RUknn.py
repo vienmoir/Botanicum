@@ -10,6 +10,8 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
 data = pd.read_csv("allrus.csv")
+#You don't need those features
+data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
 ### getting Xs and Ys #####
 X = data.iloc[0:data.shape[0], 1:data.shape[1]]
 y = data.iloc[0:data.shape[0], 0]
