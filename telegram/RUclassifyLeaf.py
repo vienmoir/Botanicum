@@ -29,9 +29,11 @@ def classify(data):
     ind = np.argpartition(prob[0], -3)[-3:]
     ind = ind[np.argsort(prob[0][ind])]
     ind = [item for item in ind if prob[0][item] > 0]
-    result = classes[ind[0]]
+    result2 = 0
+    result3 = 0
+    result1 = classes[ind[0]]
     if len(ind) > 1:
-        result = classes[ind[1]]
+        result2 = classes[ind[1]]
         if len(ind) > 2:
-            result = classes[ind[2]]
-    return result
+            result3 = classes[ind[2]]
+    return result1, result2, result3
