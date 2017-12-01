@@ -24,8 +24,11 @@ def get_image(bot, update):
     file_id = update.message.photo[-1].file_id
     photo = bot.getFile(file_id)
     photo.download(file_id+'.png')
+    print "yes"
     checkedImage,cnt,coord = leafCheck(file_id+'.png')
+    print "yeah"
     if type(checkedImage) != str:
+        print "yass"
         update.message.reply_text(random.choice([
             'Вот так лист!',
             'Отличное фото!',
@@ -33,7 +36,9 @@ def get_image(bot, update):
             'Всё в порядке, обрабатываю',
         ]))
         features = process(checkedImage,cnt,coord)
+        print "yup"
         result1, result2, result3 = classify(features)
+        print "yep"
         if result3 == 0:
             if result2 == 0:
                 update.message.reply_text("Скорее всего, это " + result1 +

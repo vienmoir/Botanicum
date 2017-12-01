@@ -10,6 +10,7 @@ import pandas as pd
 
 def classify(data):
     mms = pd.read_pickle('RUmms.p',compression='infer')
+    data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
     example = data.iloc[0:1,0:data.shape[1]]
     mms = pd.concat([mms,example],ignore_index=True)
     example_scaled = ((mms-mms.min())/(mms.max()-mms.min())).loc[2:2,]
