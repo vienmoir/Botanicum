@@ -9,7 +9,9 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("all.csv")
+data = pd.read_csv("allrus.csv")
+#You don't need those features
+data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
 ### getting Xs and Ys #####
 X = data.iloc[0:data.shape[0], 1:data.shape[1]]
 y = data.iloc[0:data.shape[0], 0]
@@ -19,7 +21,7 @@ y = y.astype('category')
 X_scaled = (X-X.min())/(X.max()-X.min())
 
 ### SPLITTING INTO TRAIN AND TEST DATA
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=28)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=34)
 
 ####### KNN
 knn = KNeighborsClassifier(n_neighbors=3) 
@@ -55,18 +57,18 @@ maxs = X.max()
 mms = pd.concat([maxs, mins], axis=1).T
 
 #сохранение и загрузка для проверки
-mms.to_pickle('mms.p')
-mms = pd.read_pickle('mms.p',compression='infer')
+mms.to_pickle('RUmms.p')
+mms = pd.read_pickle('RUmms.p',compression='infer')
  
 
 # модель:
 knn_model = KNeighborsClassifier(n_neighbors=3) 
 knn_model.fit(X_scaled, y) # Fit the model using X as training data and y as target values
-filename = 'model.sav' 
+filename = 'RUmodel.sav' 
 pickle.dump(knn_model, open(filename, 'wb'))
 
 # классы
-filehandler = open('classes.obj', 'w')
+filehandler = open('RUclasses.obj', 'w')
 pickle.dump(classes, filehandler)
 
 #sns.lmplot( x="Solidity", y="Horizontal_symmetry", data=data, fit_reg=False, hue='Type', legend=True)

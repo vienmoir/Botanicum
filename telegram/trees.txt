@@ -1,18 +1,20 @@
-1. Acer platanoides
-2. Alnus incana
-3. Betula pendula
-4. Betula pubescens
-5. Corylus avellana
-6. Crataegus monogyna
-7. Fagus sylvatica
-8. Fraxinus excelsior
-9. Ginkgo biloba
-10. Ilex aquifolium
-11. Populus nigra 
-12. Populus tremula
-13. Prunus padus
-14. Quercus robur
-15. Salix alba
-16. Syringa vulgaris 
-17. Tilia cordata 
-18. Ulmus laevis
+﻿барбарис обыкновенный
+берёза повислая
+берёза пушистая
+боярышник однопестичный
+бук европейский
+вяз гладкий
+гинкго двулопастный
+дуб черешчатый
+ива белая
+клён остролистный
+конский каштан обыкновенный
+лещина обыкновенная
+липа сердцевидная
+ольха серая
+рябина обыкновенная
+сирень обыкновенная
+тополь дрожащий
+тополь чёрный
+черёмуха обыкновенная
+ясень обыкновенный

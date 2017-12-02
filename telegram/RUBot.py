@@ -4,7 +4,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackQueryH
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from leafCheck import leafCheck
 from processLeaf import process
-from classifyLeaf import classify
+from RUclassifyLeaf import classify
 
 import random
 
@@ -17,7 +17,6 @@ def help(bot, update):
     update.message.reply_text(a)
 
 def start(bot, update):
-    #update.message.reply_text('Send me the picture of a leaf. There should be only one leaf on a light background (not working for now).')
     update.message.reply_text('Отправьте мне фото листа на светлом нейтральном фоне. Я постараюсь определить, какому дереву он принадлежал :)')
 
 def get_image(bot, update):
@@ -33,14 +32,24 @@ def get_image(bot, update):
             'Всё в порядке, обрабатываю',
         ]))
         features = process(checkedImage,cnt,coord)
-        result = classify(features)
-        update.message.reply_text(result)
+        result1, result2, result3 = classify(features)
+        if result3 == 0:
+            if result2 == 0:
+                update.message.reply_text("Скорее всего, это " + result1 +
+                                          ". Подробнее об этом виде:")
+            else:
+                update.message.reply_text("Похоже, это " + result1 + " или " + 
+                                      result2 + ". Вот их описания:")
+        else:
+            update.message.reply_text("Кажется, это " + result1 + " или "
+                                          + result2 + ". Но может быть и " +
+                                          result3 + "! Подробнее о них:")
     else:
         update.message.reply_text(checkedImage)
 
 def reply_text(bot, update):
     update.message.reply_text(random.choice([
-        'Как дела?',
+        'Следите, чтобы пальцы не попали в кадр',
         'Хотите узнать, какое рядом с вами дерево?',
         'Погода отличная, пора в парк!',
         'Пожалуйста, отправьте мне фото листика',
@@ -56,8 +65,7 @@ def trees_list(bot, update):
     update.message.reply_text('Виды деревьев:', reply_markup=reply_markup)
 
 def create_button(name):
-    return InlineKeyboardButton(name, callback_data=name.split('.')[0]),
-
+    return InlineKeyboardButton(name.decode('utf-8').capitalize(), callback_data = name),
 
 def on_press_button(bot, update):
     query = update.callback_query
@@ -71,9 +79,6 @@ def on_press_button(bot, update):
                           message_id=query.message.message_id)
 
 def get_files(bot, update):
-    #if update.message.chat.username == None:
-        #update.message.reply_text('Add username to telegram account please')
-        #return
     msg = os.listdir('/home/ifmoadmin')
     update.message.reply_text(msg)
 
