@@ -11,11 +11,9 @@ from skimage.measure import regionprops
 from scipy import stats as stts
 from leafCheck import leafCheck
 from countHWC import CountHeightWidthCoord
+import pandas as pd
 
-sourceImage = cv2.imread("img/6.jpg", cv2.IMREAD_GRAYSCALE);
-checkedImage,cnt,coord = leafCheck(sourceImage)
-
-if type(checkedImage) != str:
+def process(checkedImage,cnt,coord):
     ##### Eccentricity #####
     props = regionprops(checkedImage)
     eccentricity = props[0].eccentricity
@@ -32,7 +30,7 @@ if type(checkedImage) != str:
     extent = props[0].extent
 
     ##### Equivalent Diameter #####
-    equivalent_diameter = props[0].equivalent_diameter
+    diameter = props[0].equivalent_diameter
 
     ##### Convex hull #####
     convexhull = props[0].convex_area
@@ -142,14 +140,15 @@ if type(checkedImage) != str:
     maxVal = max(heiL2)
     #print 'Max Val ', maxVal
     
-    features = [eccentricity, circularity, solidity, extent, equivalent_diameter, 
-                convexhull, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
-                numPeaks, numVals, meanWidthP, meanHeightP, minPeak, meanWidthV,
-                meanHeightV, maxVal]
-    print "The features were successfully extracted!"
-
-else:
-    print checkedImage
-    
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    features = [[0 for u in range(23)] for v in range(1)]
+    features[0] = [eccentricity, circularity,solidity, extent, diameter, convexhull, 
+            f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, numPeaks, numVals, meanWidthP, 
+            meanHeightP, minPeak, meanWidthV, meanHeightV, maxVal]
+    data = pd.DataFrame(data = features)
+    data.columns = ['Eccentricity','Circularity','Solidity','Extent',
+            'Equivalent_diameter','Convex_hull','CircleRatio','Mean','Variance',
+            'Median','Mode','Vertical_symmetry','Horizontal_symmetry',
+            'Minimal_distance','Maximal_distance','Length_ratio','Peaks_number',
+            'Valleys_number','Average_peak_width','Average_peak_height','Minimal_peak',
+            'Average_valley_width','Average_valley_height','Maximal_valley']
+    return data

@@ -8,9 +8,12 @@ import numpy as np
 import cv2
 import math
 
-def leafCheck(sourceImage):
+def leafCheck(imageName):
     result = True
-
+    # Read image
+    img = imageName
+    #print imageName
+    sourceImage = cv2.imread(imageName, cv2.IMREAD_GRAYSCALE)
     # Resize if necessary
     TARGET_PIXEL_AREA = 300000.0
     ratio = float(sourceImage.shape[1]) / float(sourceImage.shape[0])
@@ -18,7 +21,6 @@ def leafCheck(sourceImage):
     new_w = int((new_h * ratio) + 0.5)
     img = cv2.resize(sourceImage, (new_w,new_h))
     height, width = img.shape
-    
     # Threshold 
     th, im_th = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
     
@@ -41,8 +43,10 @@ def leafCheck(sourceImage):
     
     # Connected components
     nb_components, output, stats, centroids = cv2.connectedComponentsWithStats(im_out, connectivity=8)
-    sizes = stats[1:, -1]; nb_components = nb_components - 1
+    sizes = stats[1:, -1] 
+    nb_components = nb_components - 1
     min_size = height*width*0.08
+    max_size = height*width*0.8
     
     # Remove small objects
     img = np.zeros((output.shape))
@@ -51,18 +55,13 @@ def leafCheck(sourceImage):
             img[output == i + 1] = 255
     
     img = img.astype(np.uint8)
-    
-    #Contours
+    # Contours
     edgedImage = img.copy()
     _, contours, _ = cv2.findContours(edgedImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(edgedImage,contours,-1,(255,255,255),1)
-    #cv2.imshow('After contouring', preprocessedImage)
-    #
-#    testlen = len(contours)
-#    print testlen
     if len(contours) == 0:
         result=False
-        error = 'The leaf is too small. Take a closer shot!'
+        error = 'Слишком мелко. Сфотографируйте поближе!'
         return error,0,0
 
     else:
@@ -75,10 +74,9 @@ def leafCheck(sourceImage):
         _, contours,_ = cv2.findContours(thresh2,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(thresh2,contours,-1,(255,255,255),1)
         #cv2.imshow('Tophat', thresh2)
-
         if len(contours) == 0:
             result=False
-            error = 'Error. Use a neutral background, please!'
+            error = 'Ошибка! Используйте нейтральный фон, пожалуйста'
             return error,0,0
 
         else:
@@ -116,7 +114,6 @@ def leafCheck(sourceImage):
             #
             backtorgb = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
 
-
             #
             for i in forPoint:
                 if img[i[0]-1,i[1]] == 255:
@@ -137,7 +134,6 @@ def leafCheck(sourceImage):
             height, width, channels = backtorgb.shape
             cv2.line(backtorgb,(0,coord[0]),(height,coord[0]),(0,0,255),1)
             cv2.line(backtorgb,(coord[1],width),(coord[1],0),(0,0,255),1)
-
             #
             edgedImage = img.copy()
             _, contours, _ = cv2.findContours(edgedImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -145,7 +141,7 @@ def leafCheck(sourceImage):
 
             if len(contours) > 1:
                     result=False
-                    error = "Error. This doesn't look like a leaf at all!"
+                    error = "Это совсем не похоже на лист!"
                     return error,0,0
             else:
                 if len(contours) == 1:
@@ -154,17 +150,21 @@ def leafCheck(sourceImage):
                     area = cv2.contourArea(cnt)
                     if x <= 1 or y <=1:
                         result=False
-                        error = 'Error. Leaf extends beyond the image borders.'
+                        error = 'Ошибка. Лист выходит за рамки снимка'
                         return error,0,0
                     elif x+w-5 >= img.shape[1] or y+h-5 >= img.shape[0]:
                         result=False
-                        error = 'Error. Leaf extends beyond the image borders.'
+                        error = 'Ошибка. Лист выходит за края снимка'
                         return error,0,0
                     elif area < min_size:
                         result=False
-                        error = 'Error. Not enough contrast.'
+                        error = 'Фото недостаточно контрастное, попробуйте ещё раз'
                         return error,0,0
+                    elif area > max_size:
+                        result=False
+                        error = 'Пожалуйста, сделайте снимок при другом освещении'
+                        return error,0,0
+                        
     if result == True:
-        print "Your leaf was checked successfully!"
+        print "Лист успешно обработан"
         return img,cnt,coord
-#        return 'What a leaf!'

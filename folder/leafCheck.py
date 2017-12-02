@@ -167,4 +167,3 @@ def leafCheck(sourceImage):
     if result == True:
         print "Your leaf was checked successfully!"
         return img,cnt,coord
-#        return 'What a leaf!'
