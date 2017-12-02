@@ -24,11 +24,8 @@ def get_image(bot, update):
     file_id = update.message.photo[-1].file_id
     photo = bot.getFile(file_id)
     photo.download(file_id+'.png')
-    print "yes"
     checkedImage,cnt,coord = leafCheck(file_id+'.png')
-    print "yeah"
     if type(checkedImage) != str:
-        print "yass"
         update.message.reply_text(random.choice([
             'Вот так лист!',
             'Отличное фото!',
@@ -36,9 +33,7 @@ def get_image(bot, update):
             'Всё в порядке, обрабатываю',
         ]))
         features = process(checkedImage,cnt,coord)
-        print "yup"
         result1, result2, result3 = classify(features)
-        print "yep"
         if result3 == 0:
             if result2 == 0:
                 update.message.reply_text("Скорее всего, это " + result1 +
@@ -50,7 +45,6 @@ def get_image(bot, update):
             update.message.reply_text("Кажется, это " + result1 + " или "
                                           + result2 + ". Но может быть и " +
                                           result3 + "! Подробнее о них:")
-        update.message.reply_text(result)
     else:
         update.message.reply_text(checkedImage)
 
@@ -72,8 +66,7 @@ def trees_list(bot, update):
     update.message.reply_text('Виды деревьев:', reply_markup=reply_markup)
 
 def create_button(name):
-    return InlineKeyboardButton(name, callback_data=name.split('.')[0]),
-
+    return InlineKeyboardButton(name.decode('utf-8').capitalize(), callback_data = name),
 
 def on_press_button(bot, update):
     query = update.callback_query
@@ -99,6 +92,7 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
     updater.dispatcher.add_handler(CommandHandler('get_files', get_files))
+#    updater.dispatcher.add_handler(CommandHandler('info', info))
     updater.dispatcher.add_handler(CommandHandler('trees_list', trees_list))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.photo, get_image))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.text, reply_text))
