@@ -17,7 +17,6 @@ def help(bot, update):
     update.message.reply_text(a)
 
 def start(bot, update):
-    #update.message.reply_text('Send me the picture of a leaf. There should be only one leaf on a light background (not working for now).')
     update.message.reply_text('Отправьте мне фото листа на светлом нейтральном фоне. Я постараюсь определить, какому дереву он принадлежал :)')
 
 def get_image(bot, update):
@@ -80,9 +79,6 @@ def on_press_button(bot, update):
                           message_id=query.message.message_id)
 
 def get_files(bot, update):
-    #if update.message.chat.username == None:
-        #update.message.reply_text('Add username to telegram account please')
-        #return
     msg = os.listdir('/home/ifmoadmin')
     update.message.reply_text(msg)
 
@@ -92,7 +88,6 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
     updater.dispatcher.add_handler(CommandHandler('get_files', get_files))
-#    updater.dispatcher.add_handler(CommandHandler('info', info))
     updater.dispatcher.add_handler(CommandHandler('trees_list', trees_list))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.photo, get_image))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.text, reply_text))

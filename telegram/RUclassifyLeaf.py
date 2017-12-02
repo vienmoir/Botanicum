@@ -18,10 +18,7 @@ def classify(data):
     ### загрузка модели
     filename = 'RUmodel.sav'
     loaded_model = pickle.load(open(filename, 'rb'))
-    # если всё-таки 1 результат:
-    #result = loaded_model.predict(example)    
-    
-    ### загрузка названий классов
+
     filehandler = open('RUclasses.obj', 'r') 
     classes = pickle.load(filehandler)
     
