@@ -13,6 +13,7 @@ def help(bot, update):
     /start - начать чат
     /help - список существующих команд
     /trees_list - известные мне деревья
+    Если лист дерева сложный (состоит из нескольких маленьких), сфотографируйте только верхний листик, пожалуйста
     """
     update.message.reply_text(a)
 
@@ -26,7 +27,6 @@ def get_image(bot, update):
     checkedImage,cnt,coord = leafCheck(file_id+'.png')
     if type(checkedImage) != str:
         update.message.reply_text(random.choice([
-            'Вот так лист!',
             'Отличное фото!',
             'Минутку, посмотрю в справочнике',
             'Всё в порядке, обрабатываю',
@@ -35,15 +35,31 @@ def get_image(bot, update):
         result1, result2, result3 = classify(features)
         if result3 == 0:
             if result2 == 0:
-                update.message.reply_text("Скорее всего, это " + result1 +
-                                          ". Подробнее об этом виде:")
+                keyboard = [[InlineKeyboardButton(result1.decode('utf-8').capitalize(), 
+                                                  callback_data=result1)]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
+                update.message.reply_text('Скорее всего, это ' + result1 +
+                                          '. Подробнее об этом виде:', reply_markup=reply_markup)
             else:
-                update.message.reply_text("Похоже, это " + result1 + " или " + 
-                                      result2 + ". Вот их описания:")
+                keyboard = [[InlineKeyboardButton(result1.decode('utf-8').capitalize(),
+                                                  callback_data=result1)],
+                [InlineKeyboardButton(result2.decode('utf-8').capitalize(),
+                                      callback_data=result2)]]
+                reply_markup = InlineKeyboardMarkup(keyboard)
+                update.message.reply_text('Похоже, это ' + result1 + ' или ' + 
+                                      result2 + '. Вот их описания:', 
+                                      reply_markup=reply_markup)
         else:
-            update.message.reply_text("Кажется, это " + result1 + " или "
-                                          + result2 + ". Но может быть и " +
-                                          result3 + "! Подробнее о них:")
+            keyboard = [[InlineKeyboardButton(result1.decode('utf-8').capitalize(),
+                                              callback_data=result1)],
+                 [InlineKeyboardButton(result2.decode('utf-8').capitalize(),
+                                      callback_data=result2)],
+                 [InlineKeyboardButton(result3.decode('utf-8').capitalize(),
+                                      callback_data=result3)]]
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            update.message.reply_text('Кажется, это ' + result1 + ' или '
+                                          + result2 + '. Но может быть и ' +
+                                          result3 + "! Подробнее о них:", reply_markup=reply_markup)
     else:
         update.message.reply_text(checkedImage)
 
@@ -52,7 +68,7 @@ def reply_text(bot, update):
         'Следите, чтобы пальцы не попали в кадр',
         'Хотите узнать, какое рядом с вами дерево?',
         'Погода отличная, пора в парк!',
-        'Пожалуйста, отправьте мне фото листика',
+        'Пожалуйста, отправьте мне фото листика'
     ]))
 
 def trees_list(bot, update):
@@ -65,7 +81,7 @@ def trees_list(bot, update):
     update.message.reply_text('Виды деревьев:', reply_markup=reply_markup)
 
 def create_button(name):
-    return InlineKeyboardButton(name.decode('utf-8').capitalize(), callback_data = name),
+    return InlineKeyboardButton(name.decode('utf-8').title(), callback_data = name),
 
 def on_press_button(bot, update):
     query = update.callback_query
