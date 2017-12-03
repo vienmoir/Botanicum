@@ -30,3 +30,4 @@ test2 = up(test[2])
 L = ("hello", "what", "is", "your", "name")
 (L[0].capitalize(),) + L[1:]
 print L
+print keyboard[1:20]

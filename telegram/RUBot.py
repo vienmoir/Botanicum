@@ -76,12 +76,13 @@ def trees_list(bot, update):
     msg = myfile.read()
     myfile.close()
     keyboard = map(create_button, msg.split('\n'))
+    keyboard = keyboard[1:20]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     update.message.reply_text('Виды деревьев:', reply_markup=reply_markup)
 
 def create_button(name):
-    return InlineKeyboardButton(name.decode('utf-8').title(), callback_data = name),
+    return InlineKeyboardButton(name.decode('utf-8').capitalize(), callback_data = name),
 
 def on_press_button(bot, update):
     query = update.callback_query
