@@ -68,7 +68,7 @@ filename = 'RUmodel.sav'
 pickle.dump(knn_model, open(filename, 'wb'))
 
 # классы
-filehandler = open('RUclasses.obj', 'w')
+filehandler = open('RUclasses.obj', 'wb')
 pickle.dump(classes, filehandler)
 
 #sns.lmplot( x="Solidity", y="Horizontal_symmetry", data=data, fit_reg=False, hue='Type', legend=True)
