@@ -18,16 +18,3 @@ if type(checkedImage) != str:
             print result3
 else:
     print checkedImage
-    
-#def up(name): return name.decode('utf-8').capitalize()
-#myfile = open("trees.txt")
-#msg = myfile.read()
-#myfile.close()
-#keyboard = map(up, msg.split('\n'))
-#test = msg.split('\n')
-#test[1:21] = test[0:20]
-#test2 = up(test[2])
-#L = ("hello", "what", "is", "your", "name")
-#(L[0].capitalize(),) + L[1:]
-#print L
-#print keyboard[1:20]

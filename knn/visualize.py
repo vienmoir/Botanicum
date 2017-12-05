@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
 data = pd.read_csv("all.csv")
-data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
+#data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
 ### getting Xs and Ys #####
 X = data.iloc[0:data.shape[0], 1:data.shape[1]]
 y = data.iloc[0:data.shape[0], 0]
@@ -57,9 +57,9 @@ betula_data = data.loc[(data['Type'].isin(['betula_pendula','betula_pubescens'])
 populus_data = data.loc[(data['Type'].isin(['populus_nigra','populus_tremula']))]
 
 
-sns.lmplot(x="Circularity", y="Eccentricity", data=data, fit_reg=False, hue='Type', legend=True)
-sns.lmplot(x="Circularity", y="Eccentricity", data=betula_data, fit_reg=False, hue='Type', legend=True)
-sns.lmplot(x="Circularity", y="Eccentricity", data=populus_data, fit_reg=False, hue='Type', legend=True)
+#sns.lmplot(x="Circularity", y="Eccentricity", data=data, fit_reg=False, hue='Type', legend=True)
+sns.lmplot(x="Solidity", y="Maximal_distance", data=betula_data, fit_reg=False, hue='Type', legend=True)
+sns.lmplot(x="Extent", y="Solidity", data=populus_data, fit_reg=False, hue='Type', legend=True)
 
 #CONFUSION MATRIX
 cm = confusion_matrix(y_test, preds)
