@@ -87,7 +87,7 @@ def create_button(name):
 def on_press_button(bot, update):
     query = update.callback_query
 
-    myfile = open("trees/" + query.data + ".txt")
+    myfile = open(u"trees/" + query.data + ".txt")
     msg = myfile.read()
     myfile.close()
 
