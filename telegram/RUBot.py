@@ -72,14 +72,14 @@ def reply_text(bot, update):
     ]))
 
 def trees_list(bot, update):
-    myfile = open("trees.txt")
+    myfile = open(u"trees.txt")
     msg = myfile.read()
     myfile.close()
     keyboard = map(create_button, msg.split('\n'))
     keyboard = keyboard[1:20]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text('Виды деревьев:', reply_markup=reply_markup)
+    update.message.reply_text(u'Виды деревьев:', reply_markup=reply_markup)
 
 def create_button(name):
     return InlineKeyboardButton(name.decode('utf-8').capitalize(), callback_data = name),
