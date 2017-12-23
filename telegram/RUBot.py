@@ -1,4 +1,6 @@
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
+#vim:fileencoding=utf-8
 import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -25,6 +27,7 @@ def get_image(bot, update):
     photo = bot.getFile(file_id)
     photo.download(file_id+'.png')
     checkedImage,cnt,coord = leafCheck(file_id+'.png')
+    os.remove(file_id+'.png')
     if type(checkedImage) != str:
         update.message.reply_text(random.choice([
             'Отличное фото!',
