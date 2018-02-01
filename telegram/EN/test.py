@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 from leafCheck import leafCheck
 from processLeaf import process
-from RUclassifyLeaf import classify
+from classifyLeaf import classify
 
-sourceImage = "img/1.jpg"
+sourceImage = "img/2.jpg"
 checkedImage,cnt,coord = leafCheck(sourceImage)
 if type(checkedImage) != str:
-    print "проверено"
+    print "checked"
     features = process(checkedImage,cnt,coord)
-    print "признаки извлечены"
+    print "features extracted"
+    print features
     result1, result2, result3 = classify(features)
-    print "классифицирован"
+    print "classified"
     print result1
     if result2 != 0:
         print result2

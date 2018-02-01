@@ -1,0 +1,21 @@
+﻿
+acer platanoides
+aesculus hippocastanum
+alnus incana
+berberis vulgaris
+betula pendula
+betula pubescens
+corylus avellana
+crataegus monogyna
+fagus sylvatica
+fraxinus excelsior
+ginkgo biloba
+populus nigra
+populus tremula
+prunus padus
+quercus robur
+salix alba
+sorbus aucuparia
+syringa vulgaris
+tilia cordata
+ulmus laevis
