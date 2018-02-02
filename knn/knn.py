@@ -10,6 +10,8 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 
 data = pd.read_csv("all.csv")
+#You don't need those features
+data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
 ### getting Xs and Ys #####
 X = data.iloc[0:data.shape[0], 1:data.shape[1]]
 y = data.iloc[0:data.shape[0], 0]
@@ -66,7 +68,7 @@ filename = 'model.sav'
 pickle.dump(knn_model, open(filename, 'wb'))
 
 # классы
-filehandler = open('classes.obj', 'w')
+filehandler = open('classes.obj', 'wb')
 pickle.dump(classes, filehandler)
 
 #sns.lmplot( x="Solidity", y="Horizontal_symmetry", data=data, fit_reg=False, hue='Type', legend=True)
