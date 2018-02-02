@@ -103,7 +103,7 @@ def on_press_button(bot, update):
 #    update.message.reply_text(msg)
 
 def main():
-    updater = Updater('545225881:AAElIAyqmY6P_DYExioLMO3r6fkgC7N-KkQ')
+    updater = Updater('')
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
