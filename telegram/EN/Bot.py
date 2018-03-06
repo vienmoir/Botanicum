@@ -14,8 +14,8 @@ def help(bot, update):
     a = """
     /start - start a chat
     /help - list of existing commands
+    /howto - instruction on how to take a photo
     /trees_list - tree species I recognize
-    If the leaf is compound (consists of several leaflets), take a picture of the top leaflet, please
     """
     update.message.reply_text(a)
 
@@ -69,10 +69,17 @@ def get_image(bot, update):
 def reply_text(bot, update):
     update.message.reply_text(random.choice([
          'Make sure there is only one leaf on a picture',
-         'Want to know which tree is next to you?',
+         'Would you like to know what trees are nearby?',
          'The weather is great, time to go to the park!',
          'Please send me a photo of the leaf'
     ]))
+
+def howto(bot, update):
+    h = """
+    Go to the tree you wish to recognize and pick an intact full-grown leaf. \nIf the leaf is compound, take only the top leaflet. \nTake a picture of the leaf including its petiole on a light neutral background and upload it to this chat. \nMake sure there are no foreign objects on the image.
+    Good luck!
+    """
+    update.message.reply_text(h)
 
 def trees_list(bot, update):
     myfile = open("trees.txt")
@@ -103,9 +110,10 @@ def on_press_button(bot, update):
 #    update.message.reply_text(msg)
 
 def main():
-    updater = Updater('')
+    updater = Updater('545225881:AAElIAyqmY6P_DYExioLMO3r6fkgC7N-KkQ')
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help',help))
+    updater.dispatcher.add_handler(CommandHandler('howto', howto))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
 #    updater.dispatcher.add_handler(CommandHandler('get_files', get_files))
     updater.dispatcher.add_handler(CommandHandler('trees_list', trees_list))
