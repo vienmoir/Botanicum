@@ -110,7 +110,10 @@ def on_press_button(bot, update):
 #    update.message.reply_text(msg)
 
 def main():
-    updater = Updater('545225881:AAElIAyqmY6P_DYExioLMO3r6fkgC7N-KkQ')
+    token = open("t.txt")
+    t = token.read()
+    token.close()
+    updater = Updater(t)
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CommandHandler('howto', howto))
