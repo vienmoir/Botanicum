@@ -1,4 +1,4 @@
-# LeafBot
+# Botanicum
 A telegram bot for tree leaf recognition.
 
 This repository contains code for setting up a bot, training a leaf recognition algorithm on a given set of images and implementing the result.
