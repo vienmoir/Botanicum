@@ -3,7 +3,7 @@ from leafCheck import leafCheck
 from processLeaf import process
 from RUclassifyLeaf import classify
 
-sourceImage = "img/1.jpg"
+sourceImage = "img/2.jpg"
 checkedImage,cnt,coord = leafCheck(sourceImage)
 if type(checkedImage) != str:
     print "проверено"
