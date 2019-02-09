@@ -105,10 +105,6 @@ def on_press_button(bot, update):
                           chat_id=query.message.chat_id,
                           message_id=query.message.message_id)
 
-#def get_files(bot, update):
-#    msg = os.listdir('/home/ifmoadmin')
-#    update.message.reply_text(msg)
-
 def main():
     token = open("t.txt")
     t = token.read()
@@ -118,7 +114,6 @@ def main():
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CommandHandler('howto', howto))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
-#    updater.dispatcher.add_handler(CommandHandler('get_files', get_files))
     updater.dispatcher.add_handler(CommandHandler('trees_list', trees_list))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.photo, get_image))
     updater.dispatcher.add_handler(MessageHandler(filters.Filters.text, reply_text))
