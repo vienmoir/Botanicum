@@ -103,7 +103,10 @@ def get_files(bot, update):
     update.message.reply_text(msg)
 
 def main():
-    updater = Updater('459746778:AAHDw1iCbP_FBslNlica-NxYQ02c3ZsmJ4Q')
+    token = open("t.txt")
+    t = token.read()
+    token.close()
+    updater = Updater(t)
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help',help))
     updater.dispatcher.add_handler(CallbackQueryHandler(on_press_button))
