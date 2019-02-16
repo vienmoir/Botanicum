@@ -12,23 +12,21 @@ import matplotlib.pyplot as plt
 data = pd.read_csv("all.csv")
 #You don't need those features
 data = data.drop(['Mode','Vertical_symmetry','Horizontal_symmetry', 'Minimal_peak'], axis=1)
-### getting Xs and Ys #####
+# Get X and Y
 X = data.iloc[0:data.shape[0], 1:data.shape[1]]
 y = data.iloc[0:data.shape[0], 0]
 y = y.astype('category')
 
-### NORMALIZATION #######
+# Normalize
 X_scaled = (X-X.min())/(X.max()-X.min())
 
-### SPLITTING INTO TRAIN AND TEST DATA
+# Split data
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.25, random_state=28)
 
-####### KNN
+# Fitting
 knn = KNeighborsClassifier(n_neighbors=3) 
 knn.fit(X_train, y_train) # Fit the model using X as training data and y as target values
 preds = knn.predict(X_test)	# Predict the class labels for the provided data
-3
-### accuracy 
 acc = knn.score(X_test, y_test)
 
 ## Getting TOP results
@@ -51,7 +49,7 @@ for i in range(1,len(probs)):
 
 accuracy = k/len(probs)
 
-## СОХРАНЯЕМ МИНИМУМЫ И МАКСИМУМЫ
+# Saving min and max
 mins = X.min()
 maxs = X.max()
 mms = pd.concat([maxs, mins], axis=1).T
@@ -61,7 +59,7 @@ mms = pd.concat([maxs, mins], axis=1).T
 #mms = pd.read_pickle('mms.p',compression='infer')
  
 
-# модель:
+# Model
 knn_model = KNeighborsClassifier(n_neighbors=3) 
 knn_model.fit(X_scaled, y) # Fit the model using X as training data and y as target values
 #filename = 'model.sav' 
@@ -73,7 +71,7 @@ knn_model.fit(X_scaled, y) # Fit the model using X as training data and y as tar
 
 #sns.lmplot( x="Solidity", y="Horizontal_symmetry", data=data, fit_reg=False, hue='Type', legend=True)
 
-#CONFUSION MATRIX
+# Confusion matrix
 cm = confusion_matrix(y_test, preds)
 classes = sorted(list(set(y)))
 #print classes
